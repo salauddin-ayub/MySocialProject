@@ -1,0 +1,73 @@
+{% extends 'navbar.html' %}
+{% load static %}
+{% block title_block %} {{user.user_profile.full_name}} (@{{user.username}}) {% endblock title_block %}
+{% block css_block %}
+<style>
+  .crop {
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+  }
+  .crop_img {
+    width:400px;
+    height: 300px;
+    margin: -75px 0 0 -100px;
+
+  }
+</style>
+{% endblock css_block %}
+{% block body_block %}
+<div class="row">
+<div class="col-sm-4">
+  {% if user.user_profile.profile_pic %}
+  <img src="/media/{{user.user_profile.profile_pic}}" width="250px" height="250px" class="rounded-circle">
+  {% else %}
+  <img src="{% static '/default/default.jpg' %}" width="250px" height="250px" class="rounded-circle">
+  {% endif %}
+</div>
+<div class="col-sm-8">
+<h3>{{user.username}} &nbsp; <a href="{% url 'AppLogin:edit' %}" class="btn btn-light">Edit Profile</a></h3>
+<h4>{{user.posts.count}} posts &nbsp; &nbsp; {{user.following.count}} followers &nbsp; &nbsp; {{user.followers.count}} following</h4>
+<br>
+<h4>{{user.user_profile.full_name}}</h4>
+<h6>{{user.user_profile.description|linebreaks}}</h6>
+</div>
+</div>
+<hr>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    New Post
+  </button>
+  <!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Post a photo</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form method="post" enctype="multipart/form-data">
+            {{form.as_p}}
+            {% csrf_token %}
+            <button type="submit">Post</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <br>
+  <div class="row">
+    {% for post in user.posts.all %}
+    <div class="crop">
+  <img src="/media/{{post.image}}" title="{{post.caption}}">
+    </div>
+    {% endfor %}
+  </div>
+{% endblock body_block %}
