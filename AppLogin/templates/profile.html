@@ -8,6 +8,6 @@
 <form method="POST" enctype="multipart/form-data">
     {{form|crispy }}
     {% csrf_token %}
-    <button type="submit" name="button" class='btn btn-primary'>Submit</button>
+    <button class="btn" type="submit" name="button" class='btn btn-primary'>Submit</button>
 </form>
 {% endblock body_block %}

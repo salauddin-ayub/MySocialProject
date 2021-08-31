@@ -22,15 +22,15 @@ def home(request):
 @login_required
 def liked(request, pk):
     post = Post.objects.get(pk=pk)   
-    already_liked = Like.objects.filter(posts=post, user=request.user)
+    already_liked = Like.objects.filter(post=post, user=request.user)
     if not already_liked:
-        liked_post = Like(posts=post, user=request.user)
+        liked_post = Like(post=post, user=request.user)
         liked_post.save()
     return HttpResponseRedirect(reverse('home'))    
 
-@login_required
+@login_required 
 def unliked(request, pk):    
     post = Post.objects.get(pk=pk)   
-    already_liked = Like.objects.filter(posts=post, user=request.user)
+    already_liked = Like.objects.filter(post=post, user=request.user)
     already_liked.delete()
     return HttpResponseRedirect(reverse('home')) 
